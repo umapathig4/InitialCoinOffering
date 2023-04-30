@@ -1,0 +1,437 @@
+#pragma version 5
+txn ApplicationID
+int 0
+==
+bnz main_l20
+txn OnCompletion
+int CloseOut
+==
+bnz main_l19
+txn OnCompletion
+int OptIn
+==
+bnz main_l18
+txn OnCompletion
+int DeleteApplication
+==
+bnz main_l17
+txn OnCompletion
+int UpdateApplication
+==
+bnz main_l16
+global GroupSize
+int 4
+==
+bnz main_l15
+global GroupSize
+int 3
+==
+bnz main_l14
+global GroupSize
+int 2
+==
+bnz main_l13
+global GroupSize
+int 1
+==
+bnz main_l10
+err
+main_l10:
+byte "ET"
+app_global_get
+store 3
+global LatestTimestamp
+load 3
+>=
+txn Sender
+global CreatorAddress
+==
+&&
+txna Assets 0
+byte "ID"
+app_global_get
+==
+&&
+assert
+byte "AB"
+app_global_get
+int 0
+>
+bnz main_l12
+main_l11:
+byte "IL"
+int 0
+app_global_put
+int 1
+b main_l21
+main_l12:
+itxn_begin
+int axfer
+itxn_field TypeEnum
+txna Assets 0
+itxn_field XferAsset
+txn Sender
+itxn_field AssetReceiver
+byte "AB"
+app_global_get
+itxn_field AssetAmount
+itxn_submit
+itxn_begin
+int pay
+itxn_field TypeEnum
+txn Sender
+itxn_field Receiver
+byte "AL"
+app_global_get
+itxn_field Amount
+itxn_submit
+b main_l11
+main_l13:
+gtxna 0 ApplicationArgs 0
+btoi
+store 0
+byte "AP"
+app_global_get
+store 1
+load 0
+load 1
+*
+store 2
+byte "ET"
+app_global_get
+store 3
+byte "ST"
+app_global_get
+store 4
+gtxn 0 TypeEnum
+int appl
+==
+gtxn 0 NumAssets
+int 1
+==
+&&
+gtxn 0 NumAppArgs
+int 1
+==
+&&
+txna Assets 0
+byte "ID"
+app_global_get
+==
+&&
+gtxn 1 TypeEnum
+int pay
+==
+&&
+gtxn 1 Amount
+load 2
+==
+&&
+gtxn 1 Receiver
+global CurrentApplicationAddress
+==
+&&
+gtxn 0 Sender
+gtxn 1 Sender
+==
+&&
+byte "SETUP"
+app_global_get
+int 1
+==
+&&
+load 0
+byte "AB"
+app_global_get
+<=
+&&
+load 0
+int 0
+>
+&&
+global LatestTimestamp
+load 4
+>=
+&&
+assert
+byte "AB"
+byte "AB"
+app_global_get
+load 0
+-
+app_global_put
+byte "AL"
+byte "AL"
+app_global_get
+gtxn 1 Amount
++
+app_global_put
+itxn_begin
+int axfer
+itxn_field TypeEnum
+txna Assets 0
+itxn_field XferAsset
+txn Sender
+itxn_field AssetReceiver
+load 0
+itxn_field AssetAmount
+itxn_submit
+int 1
+b main_l21
+main_l14:
+gtxna 2 ApplicationArgs 0
+btoi
+store 0
+byte "AP"
+app_global_get
+store 1
+load 0
+load 1
+*
+store 2
+byte "ET"
+app_global_get
+store 3
+byte "ST"
+app_global_get
+store 4
+gtxn 0 TypeEnum
+int axfer
+==
+gtxn 0 AssetReceiver
+gtxn 0 Sender
+==
+&&
+gtxn 0 AssetAmount
+int 0
+==
+&&
+gtxn 0 XferAsset
+txna Assets 0
+==
+&&
+gtxn 0 AssetSender
+global ZeroAddress
+==
+&&
+gtxn 0 RekeyTo
+global ZeroAddress
+==
+&&
+gtxn 0 CloseRemainderTo
+global ZeroAddress
+==
+&&
+gtxn 1 TypeEnum
+int pay
+==
+&&
+gtxn 1 Amount
+load 2
+==
+&&
+gtxn 1 Receiver
+global CurrentApplicationAddress
+==
+&&
+gtxn 2 TypeEnum
+int appl
+==
+&&
+gtxn 2 NumAssets
+int 1
+==
+&&
+gtxn 2 NumAppArgs
+int 1
+==
+&&
+txna Assets 0
+byte "ID"
+app_global_get
+==
+&&
+gtxn 1 Sender
+gtxn 2 Sender
+==
+&&
+byte "SETUP"
+app_global_get
+int 1
+==
+&&
+load 0
+byte "AB"
+app_global_get
+<=
+&&
+load 0
+int 0
+>
+&&
+global LatestTimestamp
+load 4
+>=
+&&
+assert
+byte "AB"
+byte "AB"
+app_global_get
+load 0
+-
+app_global_put
+byte "AL"
+byte "AL"
+app_global_get
+gtxn 1 Amount
++
+app_global_put
+itxn_begin
+int axfer
+itxn_field TypeEnum
+txna Assets 0
+itxn_field XferAsset
+txn Sender
+itxn_field AssetReceiver
+load 0
+itxn_field AssetAmount
+itxn_submit
+int 1
+b main_l21
+main_l15:
+gtxn 0 TypeEnum
+int pay
+==
+gtxn 0 Amount
+int 5000000
+==
+&&
+gtxn 0 Receiver
+global CurrentApplicationAddress
+==
+&&
+gtxn 1 TypeEnum
+int appl
+==
+&&
+gtxn 1 ApplicationID
+global CurrentApplicationID
+==
+&&
+gtxn 1 NumAssets
+int 1
+==
+&&
+gtxn 1 NumAppArgs
+int 3
+==
+&&
+gtxn 2 TypeEnum
+int axfer
+==
+&&
+gtxn 2 AssetReceiver
+global CurrentApplicationAddress
+==
+&&
+gtxn 2 AssetAmount
+int 0
+>
+&&
+gtxn 2 XferAsset
+txna Assets 0
+==
+&&
+gtxn 2 AssetSender
+global ZeroAddress
+==
+&&
+gtxn 2 RekeyTo
+global ZeroAddress
+==
+&&
+gtxn 2 CloseRemainderTo
+global ZeroAddress
+==
+&&
+gtxn 3 TypeEnum
+int appl
+==
+&&
+gtxn 3 ApplicationID
+int 58778139
+==
+&&
+gtxn 2 Sender
+global CreatorAddress
+==
+&&
+byte "SETUP"
+app_global_get
+int 0
+==
+&&
+gtxna 1 ApplicationArgs 1
+btoi
+gtxna 1 ApplicationArgs 2
+btoi
+<
+&&
+gtxna 1 ApplicationArgs 2
+btoi
+global LatestTimestamp
+>
+&&
+assert
+itxn_begin
+int axfer
+itxn_field TypeEnum
+txna Assets 0
+itxn_field XferAsset
+global CurrentApplicationAddress
+itxn_field AssetReceiver
+int 0
+itxn_field AssetAmount
+itxn_submit
+byte "SETUP"
+int 1
+app_global_put
+byte "ID"
+txna Assets 0
+app_global_put
+byte "AB"
+gtxn 2 AssetAmount
+app_global_put
+byte "AP"
+gtxna 1 ApplicationArgs 0
+btoi
+app_global_put
+byte "ST"
+gtxna 1 ApplicationArgs 1
+btoi
+app_global_put
+byte "ET"
+gtxna 1 ApplicationArgs 2
+btoi
+app_global_put
+byte "IL"
+int 1
+app_global_put
+int 1
+b main_l21
+main_l16:
+int 1
+b main_l21
+main_l17:
+int 1
+b main_l21
+main_l18:
+int 1
+b main_l21
+main_l19:
+int 1
+b main_l21
+main_l20:
+int 1
+main_l21:
+return

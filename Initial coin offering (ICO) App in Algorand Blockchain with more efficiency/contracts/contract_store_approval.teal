@@ -1,0 +1,84 @@
+#pragma version 5
+txn ApplicationID
+int 0
+==
+bnz main_l10
+txn OnCompletion
+int CloseOut
+==
+bnz main_l9
+txn OnCompletion
+int OptIn
+==
+bnz main_l8
+txn OnCompletion
+int DeleteApplication
+==
+bnz main_l7
+global GroupSize
+int 4
+==
+bnz main_l6
+err
+main_l6:
+gtxn 0 TypeEnum
+int pay
+==
+gtxn 0 Amount
+int 5000000
+==
+&&
+gtxn 1 TypeEnum
+int appl
+==
+&&
+gtxn 1 NumAssets
+int 1
+==
+&&
+gtxn 1 NumAppArgs
+int 3
+==
+&&
+gtxn 2 TypeEnum
+int axfer
+==
+&&
+gtxn 3 TypeEnum
+int appl
+==
+&&
+gtxn 3 ApplicationID
+global CurrentApplicationID
+==
+&&
+assert
+byte "C"
+app_global_get
+itob
+gtxn 1 ApplicationID
+app_global_put
+byte "C"
+byte "C"
+app_global_get
+int 1
++
+app_global_put
+int 1
+b main_l11
+main_l7:
+int 1
+b main_l11
+main_l8:
+int 1
+b main_l11
+main_l9:
+int 1
+b main_l11
+main_l10:
+byte "C"
+int 0
+app_global_put
+int 1
+main_l11:
+return
